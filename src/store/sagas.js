@@ -2,6 +2,89 @@ import { put, call, all, spawn, takeEvery } from "redux-saga/effects"
 import { apiService } from "./services"
 import * as types from "./constants"
 import * as actions from "./actions"
+function* api_v1_companytext_listWorker(action) {
+  try {
+    const result = yield call(apiService.api_v1_companytext_list, action)
+    yield put(actions.api_v1_companytext_listSucceeded(result, action))
+  } catch (err) {
+    yield put(actions.api_v1_companytext_listFailed(err, action))
+  }
+}
+function* api_v1_companytext_listWatcher() {
+  yield takeEvery(types.API_V1_COMPANYTEXT_LIST, api_v1_companytext_listWorker)
+}
+function* api_v1_companytext_createWorker(action) {
+  try {
+    const result = yield call(apiService.api_v1_companytext_create, action)
+    yield put(actions.api_v1_companytext_createSucceeded(result, action))
+  } catch (err) {
+    yield put(actions.api_v1_companytext_createFailed(err, action))
+  }
+}
+function* api_v1_companytext_createWatcher() {
+  yield takeEvery(
+    types.API_V1_COMPANYTEXT_CREATE,
+    api_v1_companytext_createWorker
+  )
+}
+function* api_v1_companytext_readWorker(action) {
+  try {
+    const result = yield call(apiService.api_v1_companytext_read, action)
+    yield put(actions.api_v1_companytext_readSucceeded(result, action))
+  } catch (err) {
+    yield put(actions.api_v1_companytext_readFailed(err, action))
+  }
+}
+function* api_v1_companytext_readWatcher() {
+  yield takeEvery(types.API_V1_COMPANYTEXT_READ, api_v1_companytext_readWorker)
+}
+function* api_v1_companytext_updateWorker(action) {
+  try {
+    const result = yield call(apiService.api_v1_companytext_update, action)
+    yield put(actions.api_v1_companytext_updateSucceeded(result, action))
+  } catch (err) {
+    yield put(actions.api_v1_companytext_updateFailed(err, action))
+  }
+}
+function* api_v1_companytext_updateWatcher() {
+  yield takeEvery(
+    types.API_V1_COMPANYTEXT_UPDATE,
+    api_v1_companytext_updateWorker
+  )
+}
+function* api_v1_companytext_partial_updateWorker(action) {
+  try {
+    const result = yield call(
+      apiService.api_v1_companytext_partial_update,
+      action
+    )
+    yield put(
+      actions.api_v1_companytext_partial_updateSucceeded(result, action)
+    )
+  } catch (err) {
+    yield put(actions.api_v1_companytext_partial_updateFailed(err, action))
+  }
+}
+function* api_v1_companytext_partial_updateWatcher() {
+  yield takeEvery(
+    types.API_V1_COMPANYTEXT_PARTIAL_UPDATE,
+    api_v1_companytext_partial_updateWorker
+  )
+}
+function* api_v1_companytext_deleteWorker(action) {
+  try {
+    const result = yield call(apiService.api_v1_companytext_delete, action)
+    yield put(actions.api_v1_companytext_deleteSucceeded(result, action))
+  } catch (err) {
+    yield put(actions.api_v1_companytext_deleteFailed(err, action))
+  }
+}
+function* api_v1_companytext_deleteWatcher() {
+  yield takeEvery(
+    types.API_V1_COMPANYTEXT_DELETE,
+    api_v1_companytext_deleteWorker
+  )
+}
 function* api_v1_customtext_listWorker(action) {
   try {
     const result = yield call(apiService.api_v1_customtext_list, action)
@@ -288,6 +371,12 @@ function* rest_auth_user_partial_updateWatcher() {
 }
 export default function* rootSaga() {
   const sagas = [
+    api_v1_companytext_listWatcher,
+    api_v1_companytext_createWatcher,
+    api_v1_companytext_readWatcher,
+    api_v1_companytext_updateWatcher,
+    api_v1_companytext_partial_updateWatcher,
+    api_v1_companytext_deleteWatcher,
     api_v1_customtext_listWatcher,
     api_v1_customtext_readWatcher,
     api_v1_customtext_updateWatcher,

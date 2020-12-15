@@ -3,6 +3,34 @@ const testingBackendDeployAPI = axios.create({
   baseURL: "https://testing-backend-dep-16780.botics.co/",
   headers: { Accept: "application/json", "Content-Type": "application/json" }
 })
+function api_v1_companytext_list(action) {
+  return testingBackendDeployAPI.get(`/api/v1/companytext/`)
+}
+function api_v1_companytext_create(action) {
+  return testingBackendDeployAPI.post(`/api/v1/companytext/`, null, {
+    data: action.data
+  })
+}
+function api_v1_companytext_read(action) {
+  return testingBackendDeployAPI.get(`/api/v1/companytext/${action.id}/`)
+}
+function api_v1_companytext_update(action) {
+  return testingBackendDeployAPI.put(
+    `/api/v1/companytext/${action.id}/`,
+    null,
+    { data: action.data }
+  )
+}
+function api_v1_companytext_partial_update(action) {
+  return testingBackendDeployAPI.patch(
+    `/api/v1/companytext/${action.id}/`,
+    null,
+    { data: action.data }
+  )
+}
+function api_v1_companytext_delete(action) {
+  return testingBackendDeployAPI.delete(`/api/v1/companytext/${action.id}/`)
+}
 function api_v1_customtext_list(action) {
   return testingBackendDeployAPI.get(`/api/v1/customtext/`)
 }
@@ -99,6 +127,12 @@ function rest_auth_user_partial_update(action) {
   })
 }
 export const apiService = {
+  api_v1_companytext_list,
+  api_v1_companytext_create,
+  api_v1_companytext_read,
+  api_v1_companytext_update,
+  api_v1_companytext_partial_update,
+  api_v1_companytext_delete,
   api_v1_customtext_list,
   api_v1_customtext_read,
   api_v1_customtext_update,
