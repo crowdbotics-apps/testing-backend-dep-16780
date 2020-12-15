@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 // Enter screen to navigate to
-const HOME_SCREEN = 'BlankScreen215755';
+const HOME_SCREEN = 'BlankScreen115792';
 
 const TextInputField = props => (
   <View>
