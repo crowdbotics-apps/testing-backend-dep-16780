@@ -84,12 +84,7 @@ class Blank extends React.Component {
               uri:
                 'https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png',
             }}
-            style={{
-              width: 155,
-              height: 155,
-              alignSelf: 'center',
-              resizeMode: 'contain',
-            }}
+            style={styles.logo}
           />
         </ImageBackground>
       </View>
@@ -168,6 +163,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  logo: {
+    width: 155,
+    height: 155,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+  }
 });
 
 function mapStateToProps(state) {
