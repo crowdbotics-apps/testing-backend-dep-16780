@@ -126,7 +126,7 @@ class Blank extends Component {
         <TouchableOpacity
           onPress={() => this.onLogin()}
           style={styles.button}
-          disabled={!this.state.disabled}>
+          disabled={this.state.loading}>
           <Text>Login</Text>
         </TouchableOpacity>
         {this.props.error && (
@@ -193,16 +193,21 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
+  // WILL REMOVE COMMENTS AND CONSOLE WHEN WORKING
   console.log('State Login');
   console.log(JSON.stringify(state.apiReducer));
   // whatever is the name of the connector for this (testingBackendDeployAPI or something else)
   const loginResponse = state.apiReducer.testingBackendDeployAPI?.find(
     elem => elem?.data?.key,
   ); // token exist
+  const error = state.apiReducer.testingBackendDeployAPI?.find(
+    elem => elem?.message
+  ); // error message exist
+
   console.log(loginResponse?.data?.key);
   return {
     token: loginResponse?.data?.key,
-    error: state.apiReducer.error, // will figure out how to handle after codegen
+    error: error, // will figure out how to handle after codegen
   };
 }
 
