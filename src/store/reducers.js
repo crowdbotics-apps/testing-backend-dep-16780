@@ -96,11 +96,19 @@ export default function apiReducer(state = initialState, action) {
       })
     case types.REST_AUTH_LOGIN_CREATE:
     case types.REST_AUTH_LOGIN_CREATE_SUCCEEDED:
-    case types.REST_AUTH_LOGIN_CREATE_FAILED:
+      console.log(action.response)
       return Object.assign({}, state, {
         testingBackendDeployAPI: [
           ...state.testingBackendDeployAPI,
           action.response
+        ]
+      })
+    case types.REST_AUTH_LOGIN_CREATE_FAILED:
+      console.log(action.error)
+      return Object.assign({}, state, {
+        testingBackendDeployAPI: [
+          ...state.testingBackendDeployAPI,
+          action.error
         ]
       })
     case types.REST_AUTH_LOGOUT_LIST:
