@@ -59,7 +59,7 @@ class Blank extends Component {
   onValueChange = (value, type) => {
     switch (type) {
       case 'email':
-        const emailRegex = '^[^s@]+@[^s@]+.[^s@]+';
+        const emailRegex = '^[^\s@]+@[^\s@]+.[^\s@]+';
         const emailError = !value.match(emailRegex)
           ? 'Please enter a valid email address.'
           : '';
