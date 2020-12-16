@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {rest_auth_login_create} from '../../../store/actions.js';
 import {SlideMenuIcon} from '../../../navigator/slideMenuIcon';
@@ -30,7 +30,7 @@ const TextInputField = props => (
   </View>
 );
 
-class Blank extends React.Component {
+class Blank extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,25 +48,40 @@ class Blank extends React.Component {
     };
   };
 
+  componentDidUpdate(prevProps) {
+    if (!this.state.loading) return;
+    if (this.props.token) {
+      console.log('Navigate');
+      this.props.navigation.navigate(HOME_SCREEN);
+    }
+  }
+
+  onValueChange = (value, type) => {
+    switch (type) {
+      case 'email':
+        const emailRegex = '^[^\s@]+@[^\s@]+.[^\s@]+';
+        const emailError = !value.match(emailRegex)
+          ? 'Please enter a valid email address.'
+          : '';
+        this.setState({emailError: emailError});
+        this.setState({email: value});
+        this.setState({disabled: Boolean(emailError)});
+        break;
+      case 'password':
+        const passwordError =
+          !value || !value.length ? 'Please enter a valid password.' : '';
+        this.setState({passwordError: passwordError});
+        this.setState({password: value});
+        this.setState({disabled: Boolean(passwordError)});
+        break;
+    }
+  };
+
   onLogin = () => {
-    const {email, password} = this.state;
-
-    const emailRegex = '^[^\s@]+@[^\s@]+.[^\s@]+';
-    const emailError = !email.match(emailRegex)
-      ? 'Please enter a valid email address.'
-      : '';
-    const passwordError = !password ? 'Please enter a valid password.' : '';
-    this.setState({emailError: emailError});
-    this.setState({passwordError: passwordError});
-
+    const {email, password, passwordError, emailError} = this.state;
     if (!(passwordError && emailError)) {
-      this.props.login(this.state.email, this.state.password);
-      // when login, navigate to a screen
-      // need to figure out how actions are coing to be implemented first
-      console.log(this.props.token)
-      if (this.props.token) {
-        this.props.navigation.navigate(HOME_SCREEN);
-      }
+      this.setState({loading: true});
+      this.props.login(email, password);
     }
   };
 
@@ -89,11 +104,14 @@ class Blank extends React.Component {
         </ImageBackground>
       </View>
       <View style={styles.inputContainer}>
+        <Text style={{fontSize: 30, textAlign: 'center', color: '#91c0c9'}}>
+          Login
+        </Text>
         <TextInputField
           keyboardType="email-address"
           label="Email address"
           placeholder="Email Address"
-          onChangeText={email => this.setState({email: email})}
+          onChangeText={email => this.onValueChange(email, 'email')}
           value={this.state.email}
           errorMessage={this.state.emailError}
         />
@@ -101,11 +119,14 @@ class Blank extends React.Component {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={password => this.setState({password: password})}
+          onChangeText={password => this.onValueChange(password, 'password')}
           value={this.state.password}
           errorMessage={this.state.passwordError}
         />
-        <TouchableOpacity onPress={() => this.onLogin()} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => this.onLogin()}
+          style={styles.button}
+          disabled={this.state.loading}>
           <Text>Login</Text>
         </TouchableOpacity>
         {this.props.error && (
@@ -122,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#CCCCCC',
+    backgroundColor: '#b2e3ed',
     borderRadius: 10,
     borderColor: '#000000',
     justifyContent: 'center',
@@ -168,19 +189,25 @@ const styles = StyleSheet.create({
     height: 155,
     alignSelf: 'center',
     resizeMode: 'contain',
-  }
+  },
 });
 
 function mapStateToProps(state) {
+  // WILL REMOVE COMMENTS AND CONSOLE WHEN WORKING
   console.log('State Login');
-  console.log(state.apiReducer.login);
-  // whatever is the name of the connector for this (login or something else)
-  // assuming that action.response in reducers is actually just the response itself
-  const loginResponse = state.apiReducer.login?.find(elem => elem?.token) // token exist
+  console.log(JSON.stringify(state.apiReducer));
+  // whatever is the name of the connector for this (testingBackendDeployAPI or something else)
+  const loginResponse = state.apiReducer.testingBackendDeployAPI?.find(
+    elem => elem?.data?.key,
+  ); // token exist
+  const error = state.apiReducer.testingBackendDeployAPI?.find(
+    elem => elem?.message
+  ); // error message exist
 
+  console.log(loginResponse?.data?.key);
   return {
-    token: loginResponse?.token,
-    error: state.apiReducer.error,
+    token: loginResponse?.data?.key,
+    error: error, // will figure out how to handle after codegen
   };
 }
 
@@ -190,4 +217,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(rest_auth_login_create({email, password})), // whatever is the action here
   };
 };
-export default connect(mapStateToProps,mapDispatchToProps)(Blank);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Blank);

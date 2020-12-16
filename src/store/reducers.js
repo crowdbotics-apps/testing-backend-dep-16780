@@ -1,12 +1,12 @@
 import * as types from "./constants"
 
-const initialState = { testingBackendDeployAPI: [] }
+const initialState = { universitiesAPI: [] }
 
 export default function apiReducer(state = initialState, action) {
   switch (action.type) {
-    case types.API_V1_CUSTOMTEXT_LIST:
-    case types.API_V1_CUSTOMTEXT_LIST_SUCCEEDED:
-    case types.API_V1_CUSTOMTEXT_LIST_FAILED:
+    case types.UNIVERSITIESAPI_GET_SEARCH_LIST:
+    case types.UNIVERSITIESAPI_GET_SEARCH_LIST_SUCCEEDED:
+    case types.UNIVERSITIESAPI_GET_SEARCH_LIST_FAILED:
       return Object.assign({}, state, {
         testingBackendDeployAPI: [
           ...state.testingBackendDeployAPI,
